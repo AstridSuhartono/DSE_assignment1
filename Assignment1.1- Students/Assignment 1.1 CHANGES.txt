@@ -1,0 +1,3 @@
+AssignmentMarker.java: Lines 182 and 188 replaced the string "Trade:" with "StockBroker:" for the StockBroker tests. This was a copy and paste error that affected the reporting of marks for the StockBroker class.
+
+Trade.java: At the END of both constructors Trade(StockBroker broker, int id) and Trade(StockBroker broker, String listedCompanyCode, int shareQuantity) add the line "Thread.sleep(100);" without quotes. On fast machines, multiple trades might be created with identical created/tradeId values which will impact on comparisons.
