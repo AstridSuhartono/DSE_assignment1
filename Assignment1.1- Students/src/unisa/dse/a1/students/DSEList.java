@@ -50,13 +50,21 @@ public class DSEList implements List {
 		}
 		Node currentNode = head;
 		Node prevNode = null;
-		if (currentNode == null) {
+		if(currentNode == null) {
 			return null;
 		}
-		for(int i = 0; i < index; i++) {
-			prevNode = currentNode.prev;
-			currentNode = currentNode.next;
+		if (index == 0) {
+			currentNode.prev =null;
 		}
+		if(index > 0){
+			for(int i = 0; i < index; i++) {
+				prevNode = currentNode;
+				currentNode = currentNode.next;
+			}
+		}
+			
+		
+		
 		
 	}
 
@@ -121,6 +129,7 @@ public class DSEList implements List {
 					nodeRef = nodeRef.next;
 				}
 				nodeRef.next = new Node(null, nodeRef, obj);
+				tail = nodeRef.next;
 			}
 			return true;
 		}
@@ -134,6 +143,30 @@ public class DSEList implements List {
 		if (index < 0 || index > this.size()) {
 			throw new IndexOutOfBoundsException();
 		}
+		Node nodeRef = head;
+		if (index == 0) {
+			if(head == null) {
+				head = new Node(null,null,obj);
+				tail = head;
+			} else {
+				head = new Node(nodeRef,null,obj);
+				nodeRef.prev = head;
+			}	
+		}
+		else if(index == this.size()) {
+			Node newNode = new Node(null,tail,obj);
+			tail.next = newNode;
+			newNode.prev = tail;
+			tail = newNode;
+		} else {
+			for(int i = 0; i < index && nodeRef != null; i++) {
+				nodeRef = nodeRef.next;
+			}
+			Node newNode = new Node(nodeRef,nodeRef.prev,obj);
+			nodeRef.prev.next = newNode;
+			nodeRef.prev = newNode;
+		}
+		return true;
 	}
 
 	// searches list for parameter's String return true if found
