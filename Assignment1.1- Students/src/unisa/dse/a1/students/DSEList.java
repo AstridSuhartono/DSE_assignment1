@@ -48,24 +48,33 @@ public class DSEList implements List {
 		if(index < 0 || index > this.size()) {
 			throw new IndexOutOfBoundsException();
 		}
-		Node currentNode = head;
-		Node prevNode = null;
-		if(currentNode == null) {
+		else if (head == null) {
 			return null;
 		}
+		Node currentNode = head;
+		Node prevNode = null;
 		if (index == 0) {
-			currentNode.prev =null;
-		}
-		if(index > 0){
+			String item = head.getString();
+			head = head.next;
+			head.prev = null;
+			return item;
+		} else if (index == this.size() - 1) {
+			while(currentNode.next != null) {
+				prevNode = currentNode;
+				currentNode = currentNode.next;
+			}
+			tail = prevNode;
+			prevNode.next = null;
+			
+		} else {
 			for(int i = 0; i < index; i++) {
 				prevNode = currentNode;
 				currentNode = currentNode.next;
 			}
-		}
-			
-		
-		
-		
+			prevNode.next = currentNode.next;
+			currentNode.next.prev = prevNode;
+		} 
+		return currentNode.getString();
 	}
 
 	// returns the index of the String parameter
@@ -74,9 +83,14 @@ public class DSEList implements List {
 			return -1;
 		}
 		Node nodeRef = head;
-		while(!nodeRef.getString().equals(obj)){
-			
+		int count = 0;
+		while(nodeRef != null){
+			if (!nodeRef.getString().equals(obj)) {
+				 nodeRef = nodeRef.next;
+				 count++;
+			}
 		}
+		return count;
 	}
 
 	// returns String at parameter's index
@@ -177,13 +191,23 @@ public class DSEList implements List {
 
 	// searches list for parameter's String return true if found
 	public boolean contains(String obj) {
-
+		if (obj == null) {
+			throw new NullPointerException();
+		}
+		Node nodeRef = head;
+		while(nodeRef != null){
+			if (nodeRef.getString().equals(obj)) {
+				return true;
+			}
+			nodeRef = nodeRef.next;
+		}
+		return false;
 	}
 
 	// removes the parameter's String form the list
 	public boolean remove(String obj) {
 		if(obj == null || head == null) {
-			throw new IndexOutOfBoundsException();
+			throw new NullPointerException();
 		}
 		Node currentNode = head;
 		Node prevNode = null;
