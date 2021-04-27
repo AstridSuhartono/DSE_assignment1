@@ -13,6 +13,7 @@ public class SecuritiesExchange {
 	private String name;
 	
 	public String getName() {
+		return name;
 	}
 	
 	/**
@@ -36,6 +37,7 @@ public class SecuritiesExchange {
 	 */
 	public SecuritiesExchange(String name)
 	{
+		this.name = name;
 	}
 	
 	/**

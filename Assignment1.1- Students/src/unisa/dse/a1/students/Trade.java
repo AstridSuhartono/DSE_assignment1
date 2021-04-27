@@ -22,6 +22,7 @@ public class Trade implements Comparable<Trade> {
 	 * @return The company's code
 	 */
 	public void getCompanyCode() {
+
 	}
 	
 	private int shareQuantity;

@@ -49,16 +49,16 @@ public class DSEList implements List {
 			throw new IndexOutOfBoundsException();
 		}
 		else if (head == null) {
-			return null;
+			throw new NullPointerException();
 		}
 		Node currentNode = head;
 		Node prevNode = null;
-		if (index == 0) {
+		if (index == 0 && head.next != null) {
 			String item = head.getString();
 			head = head.next;
 			head.prev = null;
 			return item;
-		} else if (index == this.size() - 1) {
+		} else if (index == this.size() - 1 && currentNode.next != null) {
 			while(currentNode.next != null) {
 				prevNode = currentNode;
 				currentNode = currentNode.next;
@@ -71,8 +71,10 @@ public class DSEList implements List {
 				prevNode = currentNode;
 				currentNode = currentNode.next;
 			}
-			prevNode.next = currentNode.next;
-			currentNode.next.prev = prevNode;
+			if(currentNode.next != null) {
+				prevNode.next = currentNode.next;
+				currentNode.next.prev = prevNode;
+			}	
 		} 
 		return currentNode.getString();
 	}
