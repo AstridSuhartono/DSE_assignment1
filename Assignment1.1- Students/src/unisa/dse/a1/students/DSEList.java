@@ -4,6 +4,7 @@ import unisa.dse.a1.interfaces.List;
 
 /**
  * @author simont
+ * @author AstridS
  *
  */
 public class DSEList implements List {
@@ -22,7 +23,6 @@ public class DSEList implements List {
 
 	// Takes a list then adds each element into a new list
 	public DSEList(DSEList other) { // Copy constructor.
-		// create a new list called copy
 		DSEList copy = new DSEList();
 		// copy the empty other list into copy list
 		if (other.head == null) {
@@ -45,54 +45,56 @@ public class DSEList implements List {
 
 	// remove the String at the parameter's index
 	public String remove(int index) {
-		if(index < 0 || index > this.size()) {
+		if (index < 0 || index > this.size()) {
 			throw new IndexOutOfBoundsException();
-		}
-		else if (head == null) {
+		} else if (head == null) {
 			throw new NullPointerException();
 		}
 		Node currentNode = head;
 		Node prevNode = null;
+		//to remove the head node of the list
 		if (index == 0 && head.next != null) {
 			String item = head.getString();
 			head = head.next;
 			head.prev = null;
 			return item;
-		} else if (index == this.size() - 1 && currentNode.next != null) {
-			while(currentNode.next != null) {
+		} 
+		//to remove the last node of the list
+		else if (index == this.size() - 1 && currentNode.next != null) {
+			while (currentNode.next != null) {
 				prevNode = currentNode;
 				currentNode = currentNode.next;
 			}
 			tail = prevNode;
 			prevNode.next = null;
-			
-		} else {
-			for(int i = 0; i < index; i++) {
+		} 
+		//to remove the node between and not including first and last node of the list
+		else {
+			for (int i = 0; i < index; i++) {
 				prevNode = currentNode;
 				currentNode = currentNode.next;
 			}
-			if(currentNode.next != null) {
+			if (currentNode.next != null) {
 				prevNode.next = currentNode.next;
 				currentNode.next.prev = prevNode;
-			}	
-		} 
+			}
+		}
 		return currentNode.getString();
 	}
 
 	// returns the index of the String parameter
 	public int indexOf(String obj) {
-		if(obj == null) {
-			return -1;
-		}
 		Node nodeRef = head;
 		int count = 0;
-		while(nodeRef != null){
-			if (!nodeRef.getString().equals(obj)) {
-				 nodeRef = nodeRef.next;
-				 count++;
-			}
+		while (nodeRef != null && !nodeRef.getString().equals(obj)) {
+			nodeRef = nodeRef.next;
+			count++;
 		}
-		return count;
+		if (nodeRef == null) {
+			return -1;
+		} else {
+			return count;
+		}
 	}
 
 	// returns String at parameter's index
@@ -124,7 +126,7 @@ public class DSEList implements List {
 		return count;
 	}
 
-	// Take each element of the list a writes them to a string
+	// Take each element of the list and writes them to a string
 	@Override
 	public String toString() {
 		Node nodeRef = head;
@@ -166,25 +168,29 @@ public class DSEList implements List {
 			throw new IndexOutOfBoundsException();
 		}
 		Node nodeRef = head;
+		//add a new node at the head
 		if (index == 0) {
-			if(head == null) {
-				head = new Node(null,null,obj);
+			if (head == null) {
+				head = new Node(null, null, obj);
 				tail = head;
 			} else {
-				head = new Node(nodeRef,null,obj);
+				head = new Node(nodeRef, null, obj);
 				nodeRef.prev = head;
-			}	
-		}
-		else if(index == this.size()) {
-			Node newNode = new Node(null,tail,obj);
+			}
+		} 
+		//add a new node to become the tail of the list
+		else if (index == this.size()) {
+			Node newNode = new Node(null, tail, obj);
 			tail.next = newNode;
 			newNode.prev = tail;
 			tail = newNode;
-		} else {
-			for(int i = 0; i < index && nodeRef != null; i++) {
+		} 
+		//add a new node between and excluding the head and the tail of the list
+		else {
+			for (int i = 0; i < index && nodeRef != null; i++) {
 				nodeRef = nodeRef.next;
 			}
-			Node newNode = new Node(nodeRef,nodeRef.prev,obj);
+			Node newNode = new Node(nodeRef, nodeRef.prev, obj);
 			nodeRef.prev.next = newNode;
 			nodeRef.prev = newNode;
 		}
@@ -197,7 +203,7 @@ public class DSEList implements List {
 			throw new NullPointerException();
 		}
 		Node nodeRef = head;
-		while(nodeRef != null){
+		while (nodeRef != null) {
 			if (nodeRef.getString().equals(obj)) {
 				return true;
 			}
@@ -206,28 +212,29 @@ public class DSEList implements List {
 		return false;
 	}
 
-	// removes the parameter's String form the list
+	// removes the parameter's String from the list
 	public boolean remove(String obj) {
-		if(obj == null || head == null) {
+		if (obj == null || head == null) {
 			throw new NullPointerException();
 		}
 		Node currentNode = head;
 		Node prevNode = null;
-		//iterate the list while the node is not null and the element not equals obj
-		while(currentNode != null && !currentNode.getString().equals(obj)) {
+		// iterate the list
+		while (currentNode != null && !currentNode.getString().equals(obj)) {
 			prevNode = currentNode;
 			currentNode = currentNode.next;
 		}
-		//shift head.next node into the head node
-		if(prevNode == null) {
+		//remove obj at the head
+		if (prevNode == null) {
 			head = head.next;
-			if(head != null) {
+			if (head != null) {
 				head.prev = null;
 			}
 		}
+		//remove obj other than at the head 
 		else {
 			prevNode.next = currentNode.next;
-			if(prevNode.next != null) {
+			if (prevNode.next != null) {
 				prevNode.next.prev = prevNode;
 			}
 		}

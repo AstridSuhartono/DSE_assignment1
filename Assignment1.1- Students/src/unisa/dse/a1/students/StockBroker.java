@@ -8,7 +8,7 @@ public class StockBroker {
 	 * List of pending trades to be completed. Must store a generic type.
 	 */
 	private PriorityQueue<Trade> pendingTrades = new PriorityQueue<Trade>();
-	
+
 	/**
 	 * List of stocks this stock broker is "watching"
 	 */
@@ -17,62 +17,78 @@ public class StockBroker {
 	/**
 	 * returns a DEEP copy of the watchlist. Changes to the list returned from here
 	 * should NOT change the list stored by this broker
+	 * 
 	 * @return
 	 */
 	public DSEListGeneric<String> getWatchlist() {
 		return new DSEListGeneric<String>(watchList);
 	}
-	
+
 	/**
-	 * Adds the company code to the watchlist if it's not null and not already in there
+	 * Adds the company code to the watchlist if it's not null and not already in
+	 * there
+	 * 
 	 * @param companyCode
 	 * @return true if added
 	 */
-	public boolean addWatchlist(String companyCode)
-	{
+	public boolean addWatchlist(String companyCode) {
+		if (watchList != null && !watchList.contains(companyCode)) {
+			return watchList.add(companyCode);
+		}
+		return false;
 	}
-	
+
 	private String name;
 
 	/**
 	 * Name of the stock brokerage firm
+	 * 
 	 * @return
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * Should store the broker's name and ensure the broker is setup ready to use
+	 * 
 	 * @param name
 	 */
-	public StockBroker(String name)
-	{
+	public StockBroker(String name) {
 		this.name = name;
 	}
-	
+
 	/**
-	 * Adds the Trade to the pendingTrades list if it's not null and not already in there
+	 * Adds the Trade to the pendingTrades list if it's not null and not already in
+	 * there
+	 * 
 	 * @param companyCode
 	 * @return true if added
 	 */
-	public boolean placeOrder(Trade order)
-	{
+	public boolean placeOrder(Trade order) {
+		if (order == null) {
+			return false;
+		}
+		if (pendingTrades != null && !pendingTrades.contains(order)) {
+			return pendingTrades.offer(order);
+		}
+		return false;
 	}
-	
+
 	/**
 	 * Gets, removes, and returns the next trade to process
+	 * 
 	 * @return Trade to process
 	 */
-	public Trade getNextTrade()
-	{
+	public Trade getNextTrade() {
+		return pendingTrades.poll();
 	}
-	
+
 	/**
 	 * @return Number of pending trades
 	 */
-	public int getPendingTradeCount()
-	{
+	public int getPendingTradeCount() {
+		return pendingTrades.size();
 	}
 
 	/**
@@ -94,5 +110,5 @@ public class StockBroker {
 			return false;
 		return true;
 	}
-	
+
 }

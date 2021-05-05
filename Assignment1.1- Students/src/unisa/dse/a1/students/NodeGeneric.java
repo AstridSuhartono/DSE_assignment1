@@ -14,7 +14,7 @@ public class NodeGeneric<T> {
 
 	public NodeGeneric<T> next;
 	public NodeGeneric<T> prev;
-	
+
 	private T t;
 
 	public NodeGeneric(NodeGeneric<T> next, NodeGeneric<T> prev, T node) {
@@ -36,12 +36,12 @@ public class NodeGeneric<T> {
 		if (!(other instanceof NodeGeneric<?>))
 			return false;
 
-		return t.equals(((NodeGeneric<T>)other).get());
+		return t.equals(((NodeGeneric<T>) other).get());
 	}
 
 	@Override
 	public int hashCode() {
-		if ( t == null )
+		if (t == null)
 			return 0;
 		return t.hashCode();
 	}
