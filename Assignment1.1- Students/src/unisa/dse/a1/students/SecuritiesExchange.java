@@ -39,9 +39,9 @@ public class SecuritiesExchange {
 	 */
 	public SecuritiesExchange(String name) {
 		this.name = name;
-		this.brokers = null;
-		this.announcements = null;
-		this.companies = null;
+		this.brokers = new DSEListGeneric<StockBroker>();
+		this.announcements = new DSEListGeneric<String>();
+		this.companies =  new HashMap<>();
 	}
 
 	/**
@@ -104,29 +104,31 @@ public class SecuritiesExchange {
 	 *                                  exchange
 	 */
 	public int processTradeRound() throws UntradedCompanyException {
+		if(announcements == null) {
+			announcements = new DSEListGeneric<String>(); 
+		}
 		int noOfTrade = 0;
-		SecuritiesExchange secExchange;
-		if (companies.containsKey(brokers)) {
-			String unlistedCompanyCode;
-			throw new UntradedCompanyException(unlistedCompanyCode);
-		}
 		for (int index = 0 ; index < brokers.size(); index++ ) {
-			  Trade trade = brokers.get(index).getNextTrade();
-			  while(trade != null) {
-				  int quantity = trade.getShareQuantity();
-				  String companyCode = trade.getCompanyCode();
-				  String brokerName = trade.getStockBroker().getName();
-				  ListedCompany company = companies.get(companyCode);
-				  int price = company.getCurrentPrice();
-				  announcements = new DSEListGeneric<String>();
-				  announcements.add("Trade: " + quantity + " " + companyCode + " @ " + price + " via " +brokerName);
-				  noOfTrade++;
-			  }
+			Trade trade = brokers.get(index).getNextTrade();
+			if(trade != null) {
+				int quantity = trade.getShareQuantity();
+				String companyCode = trade.getCompanyCode();
+				String brokerName = trade.getStockBroker().getName();
+				if(!companies.containsKey(companyCode)) {
+					throw new UntradedCompanyException(companyCode);
+				}
+				ListedCompany listedCompany = companies.get(companyCode);
+				int price = listedCompany.getCurrentPrice();
+				listedCompany.processTrade(quantity);
+				announcements.add("Trade: " + quantity + " " + companyCode + " @ " + price + " via " + brokerName);
+				noOfTrade++; 
+			}
 		}
-		  return noOfTrade;
+		return noOfTrade;
 	}
 
 	public int runCommandLineExchange(Scanner sc) {
+		return 0;
 
 	}
 }
